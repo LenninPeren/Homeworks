@@ -1,0 +1,104 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Funciones en R
+
+Estructura 
+  
+    f <- function(arg1, arg2, ...){
+             # código
+             
+             
+    }
+    
+    f: Nombre de la función 
+    arg1, arg2: argumentos de entrada, que activan la función 
+    Código: lineas de código que se deberá ejecutar al llamar a la función 
+
+    
+Ejemplo
+
+```{r}
+area_rectangulo <- function(a, b){
+  area <- a * b
+  print(paste("El área es: ", area))
+}
+
+
+```
+
+Si tenemos un rectangulo de lados a = 12.3 y b = 4.5
+
+```{r}
+area_rectangulo(12.3, 4.5)
+```
+Argumentos
+
+  Son valores iniciales con los que la función deberá ejecutarse cuando se invoca.
+
+
+Argumentos por valor 
+  
+  Son valores que tiene una función por defecto, si no se agrega un argumento al invocar la función 
+  está se ejecuta con los valores predeterminados.
+  
+
+
+
+Familia apply
+  
+  
+  ES usada para aplicar una función a cada elemento de una estructura de datos, es utilizada par aplicar funciones a matrices, vectores, data frames y listas. 
+  
+Estructura
+  
+    apply(X,       # Array, matriz o data frame
+      MARGIN,  # 1: filas, 2: columnas, c(1, 2): filas y columnas
+      FUN,     # Función a ser aplicada
+      ...)     # Argumentos adicionales para ser pasados a FUN
+  
+  
+lapply 
+
+permite aplicar funciones a todos los elementos de una lista. 
+
+
+```{r}
+# Data frame
+df <- data.frame(x = 1:4, y = 5:8, z = 10:13)
+df
+```
+  
+
+```{r}
+apply(X = df, MARGIN = 1, FUN = sum)
+```
+lapply 
+
+  Aplica una función a cada elemento de una lista 
+  
+  
+```{r}
+  ejemplo_lapply <- lapply(df, function(row) sum(row))
+  ejemplo_lapply
+```
+sapply 
+
+  Es similar a la función lapply pero en forma simplificada 
+  
+```{r}
+  ejemplo_lapply <- sapply(df, sum)
+  ejemplo_lapply
+```
+
+vapply 
+
+  Similar a la sapply, pero permite especificar el tipo de valor de retorno, utilizando el argumento FUN.VALUE
+  
+```{r}
+vapply_result <- vapply(df, function(column) sum(column), numeric(1))
+vapply_result
+```
+
