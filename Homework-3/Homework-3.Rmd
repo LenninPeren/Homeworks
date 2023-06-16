@@ -1,0 +1,94 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+- Leer archivos CSV
+
+Se pueden utilizar las funciones read.csv o read.csv2, la diferencia entre ambas funciones es el separador csv utiliza el coma, y csv2 utiliada punto y coma
+
+La forma más sencilla es utilizando read.csv("nombre_del_archivo.csv"), Si el archivo a leer se encuentra almacenado en el mismo directorio del notebook, de lo contrario se debe agragregar la dirección completa del archivo. 
+
+Utilizando unicamente read.csv("nombre_del_archivo.csv"), se utilizan los atributos predeterminados de lectura, si se desea modificar algun parametro se puede utilizar la siguiente sintaxis.
+
+read.csv(file,                 # Nombre del archivo o ruta completa del archivo
+         header = TRUE,        # Leer el encabezado (TRUE) o no (FALSE)
+         sep = ",",            # Separador de los valores
+         quote = "\"",         # Caracter de citaciones
+         dec = ".",            # Punto decimal
+         fill = TRUE,          # Rellenar celdas vacías (TRUE) o no (FALSE)
+         comment.char = "",    # Carácter de los comentarios o cadenas vacías
+         encoding = "unknown", # Codificación del archivo
+         ...)                  # Argumentos adicionales
+
+
+Los valores por defecto de las funciones son:
+
+read.csv2(nombre_del_archivo, header = TRUE, sep = ";", quote = "\"", dec = ",",
+          fill = TRUE, comment.char = "", encoding = "unknown", ...)
+
+- Función select()
+
+Es una función que permite la selección de ciertas columnas de un dataframe que queramos extraer. 
+
+Sintaxis 
+    
+    select(df, col1, coln,...)
+      donde 
+        df  = dataframe de donde se extraeran las columnas
+        col1 = primera columna que se desea extraer
+        coln = segunda columna que se desea extraer
+        
+Si se desea extraer el resto de columnas menos las que se indica se utilia la sintaxis
+
+    select(df, -c(col1, coln))
+
+Y si se desea extraer un rango de columnas se utiliza 
+
+    select(df, 1:n)
+
+
+```{r}
+
+
+library(dplyr)
+
+my_file <-  read.csv("primary_results.csv")
+
+my_file%>%
+  filter(state=="Florida")
+
+
+
+my_file%>%
+  filter(candidate == "Hillary Clinton" | candidate == "Donald Trump")
+
+my_file%>%
+  filter(party == "Democrata" & county == "Shelby")
+
+my_file%>%
+  filter(state == "Alabama" & votes > 15000)
+
+
+
+
+my_file%>%
+
+  filter(state == "Texas" & county == "Denton")%>%
+  select(5:7)%>%
+  arrange(desc(votes))
+  
+
+my_file%>%
+  filter(party == "Republican")%>%
+  filter(candidate == "Ted Cruz")%>%
+  filter(state == "Alaska")%>%
+  mutate(vote_count = votes / fraction_votes)%>%
+  arrange(desc(vote_count))
+  
+  
+
+```
+
+
+  
