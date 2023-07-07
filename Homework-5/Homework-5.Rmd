@@ -1,0 +1,85 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+questions <- read.csv("questions.csv")
+answers <- read.csv("answers.csv")
+tags <-  read.csv("tags.csv")
+question_tags <- read.csv("question_tags.csv")
+
+questions
+answers
+tags
+question_tags
+
+#1
+
+joined_tabs <- questions %>%
+  left_join(question_tags, by=c("id" = "question_id"))%>%
+  left_join(tags, by="id")
+
+joined_tabs
+  
+question_with_tags <- joined_tabs%>%
+  mutate(tag_name = replace_na("only-r"))
+
+question_with_tags
+  
+#2
+
+question_with_tags %>%
+  group_by(tag_name)%>%
+  summarize(mean_score = mean(score))%>%
+  arrange(desc(mean_score))
+
+
+#3
+
+questions_answers_joined <- questions %>%
+  inner_join(answers, by=c("id" = "question_id"), suffix=c("_question", "_answer"))%>%
+  mutate(gap = (date(creation_date_answer) - date(creation_date_question)))
+
+questions_answers_joined
+
+
+#4
+
+answers_count <- answers %>%
+  count(question_id)%>%
+  arrange(desc(question_id))
+
+answers_count
+
+
+questions_answers_counts <- questions %>%
+  left_join(answers_count, by=c("id" = "question_id")) %>%
+  replace_na(list(n = 0))
+
+
+questions_answers_counts
+
+
+#5 
+
+qst_tags_ans_count <- question_tags %>%
+  inner_join(questions_answers_counts, by = c("question_id" = "id"))
+  
+qst_tags_ans_count <- qst_tags_ans_count %>%
+  inner_join(tags, by = c("question_id" = "id"))
+
+
+qst_tags_ans_count
+
+
+```
+
+
